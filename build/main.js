@@ -136,17 +136,17 @@ class DreoAdapter extends utils.Adapter {
         try {
             if (!managed.device.supportsControl(control)) {
                 this.log.warn(`Device ${managed.device.info.name ?? managed.device.info.id} does not support control.${control}`);
-                await this.setStateChangedAsync(`${devicePath}.control.${control}`, state.val, true);
+                await this.setStateQualityAware(`${devicePath}.control.${control}`, state.val);
                 return;
             }
             await managed.device.setControl(control, state.val);
-            await this.setStateChangedAsync(`${devicePath}.control.${control}`, state.val, true);
+            await this.setStateQualityAware(`${devicePath}.control.${control}`, state.val);
             await managed.device.refresh();
             await this.writeDeviceStates(devicePath, managed.device);
         }
         catch (error) {
             this.log.error(this.formatError(`Failed to send Dreo command ${control} for ${managed.device.info.id}`, error));
-            await this.setStateChangedAsync(`${devicePath}.control.${control}`, state.val, true);
+            await this.setStateQualityAware(`${devicePath}.control.${control}`, state.val);
         }
     }
     onUnload(callback) {
@@ -233,7 +233,7 @@ class DreoAdapter extends utils.Adapter {
     async writeDeviceStates(path, device) {
         const states = device.getCommonStates();
         for (const [relativeId, value] of Object.entries(states)) {
-            await this.setStateChangedAsync(`${path}.${relativeId}`, value, true);
+            await this.setStateQualityAware(`${path}.${relativeId}`, value);
         }
         await this.mirrorStatusToControl(path, "power", states["status.power"]);
         await this.mirrorStatusToControl(path, "targetTemperature", states["status.targetTemperature"]);
@@ -242,9 +242,17 @@ class DreoAdapter extends utils.Adapter {
         await this.mirrorStatusToControl(path, "oscillation", states["status.oscillation"]);
     }
     async mirrorStatusToControl(path, control, value) {
-        if (value === undefined || value === null)
+        if (value === undefined)
             return;
-        await this.setStateChangedAsync(`${path}.control.${control}`, value, true);
+        await this.setStateQualityAware(`${path}.control.${control}`, value);
+    }
+    async setStateQualityAware(id, value) {
+        const unavailable = value === undefined || value === null;
+        await this.setStateChangedAsync(id, {
+            val: unavailable ? null : value,
+            ack: true,
+            q: unavailable && (id.includes(".status.") || id.includes(".control.") || id.endsWith(".info.online")) ? 0x40 : 0,
+        });
     }
     scheduleNextPoll() {
         if (this.stopped)

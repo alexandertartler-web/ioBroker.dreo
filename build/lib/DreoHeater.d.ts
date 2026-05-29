@@ -9,6 +9,7 @@ export declare class DreoHeater extends DreoDevice {
     setControl(control: string, value: any): Promise<Record<string, any>>;
     private getOscillationState;
     private sendOscillation;
+    private sendAndApply;
     private normalizeMode;
     private durationFromTimer;
     private hasProperty;

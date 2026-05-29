@@ -30,6 +30,7 @@ export declare class DreoDevice {
     setControl(control: string, value: any): Promise<Record<string, any>>;
     sendCommand(desired: Record<string, any>): Promise<Record<string, any>>;
     protected getStateValue(key: string): any;
+    protected hasCapability(key: string): boolean;
     protected extractProperties(payload: DreoRawState): Record<string, any>;
     protected toBoolean(value: any): boolean;
     private safeRawPayload;

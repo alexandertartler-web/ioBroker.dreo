@@ -54,7 +54,13 @@ export class DreoDevice {
 
   public async refresh(): Promise<void> {
     this.rawState = await this.client.getDeviceState(this.info.serialNumber);
-    this.properties = this.extractProperties(this.rawState);
+    const nextProperties = this.extractProperties(this.rawState);
+    if (Object.keys(nextProperties).length > 0) {
+      this.properties = {
+        ...this.properties,
+        ...nextProperties,
+      };
+    }
   }
 
   public getRawState(): DreoRawState {
@@ -95,13 +101,16 @@ export class DreoDevice {
   }
 
   public supportsControl(control: string): boolean {
-    if (control === "power") return true;
+    if (control === "power") return this.hasCapability("poweron");
     return false;
   }
 
   public async setControl(control: string, value: any): Promise<Record<string, any>> {
     if (control === "power") {
-      return await this.sendCommand({ poweron: this.toBoolean(value) });
+      const desired = { poweron: this.toBoolean(value) };
+      const result = await this.sendCommand(desired);
+      this.applyReportedUpdate(desired);
+      return result;
     }
     throw new Error(`Unsupported Dreo control: ${control}`);
   }
@@ -116,6 +125,15 @@ export class DreoDevice {
       return value.state;
     }
     return value ?? null;
+  }
+
+  protected hasCapability(key: string): boolean {
+    if (key in this.properties) return true;
+    try {
+      return JSON.stringify(this.info.raw).includes(`"${key}"`);
+    } catch {
+      return false;
+    }
   }
 
   protected extractProperties(payload: DreoRawState): Record<string, any> {

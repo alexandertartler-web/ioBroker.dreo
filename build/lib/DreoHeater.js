@@ -45,18 +45,31 @@ class DreoHeater extends DreoDevice_1.DreoDevice {
         };
     }
     supportsControl(control) {
-        return ["power", "targetTemperature", "mode", "fanSpeed", "oscillation"].includes(control) || super.supportsControl(control);
+        switch (control) {
+            case "power":
+                return this.hasCapability(COMMANDS.power);
+            case "targetTemperature":
+                return this.hasCapability(COMMANDS.targetTemperature);
+            case "mode":
+                return this.hasCapability(COMMANDS.mode);
+            case "fanSpeed":
+                return this.hasCapability(COMMANDS.heatLevel) || this.hasCapability(COMMANDS.fanSpeed);
+            case "oscillation":
+                return this.hasCapability(COMMANDS.oscillation) || this.hasCapability(COMMANDS.oscillationAngle) || this.hasCapability(COMMANDS.oscillationMode);
+            default:
+                return super.supportsControl(control);
+        }
     }
     async setControl(control, value) {
         switch (control) {
             case "power":
-                return await this.sendCommand({ [COMMANDS.power]: this.toBoolean(value) });
+                return await this.sendAndApply({ [COMMANDS.power]: this.toBoolean(value) });
             case "targetTemperature":
-                return await this.sendCommand({ [COMMANDS.targetTemperature]: this.toInteger(value) });
+                return await this.sendAndApply({ [COMMANDS.targetTemperature]: this.toInteger(value) });
             case "mode":
-                return await this.sendCommand({ [COMMANDS.mode]: this.normalizeMode(value) });
+                return await this.sendAndApply({ [COMMANDS.mode]: this.normalizeMode(value) });
             case "fanSpeed":
-                return await this.sendCommand({ [COMMANDS.heatLevel]: this.toInteger(value) });
+                return await this.sendAndApply({ [COMMANDS.heatLevel]: this.toInteger(value) });
             case "oscillation":
                 return await this.sendOscillation(value);
             default:
@@ -75,23 +88,28 @@ class DreoHeater extends DreoDevice_1.DreoDevice {
     async sendOscillation(value) {
         if (typeof value === "number") {
             if (this.hasProperty(COMMANDS.oscillationMode))
-                return await this.sendCommand({ [COMMANDS.oscillationMode]: value });
+                return await this.sendAndApply({ [COMMANDS.oscillationMode]: value });
             if (this.hasProperty(COMMANDS.oscillationAngle))
-                return await this.sendCommand({ [COMMANDS.oscillationAngle]: value });
+                return await this.sendAndApply({ [COMMANDS.oscillationAngle]: value });
         }
         if (typeof value === "string") {
             const normalized = value.toLowerCase().replace(/[^0-9a-z]/g, "");
             if (normalized in OSCILLATION_LABEL_TO_OSCMODE && this.hasProperty(COMMANDS.oscillationMode)) {
-                return await this.sendCommand({ [COMMANDS.oscillationMode]: OSCILLATION_LABEL_TO_OSCMODE[normalized] });
+                return await this.sendAndApply({ [COMMANDS.oscillationMode]: OSCILLATION_LABEL_TO_OSCMODE[normalized] });
             }
             if (["60", "90", "120", "0"].includes(normalized) && this.hasProperty(COMMANDS.oscillationAngle)) {
-                return await this.sendCommand({ [COMMANDS.oscillationAngle]: Number(normalized) });
+                return await this.sendAndApply({ [COMMANDS.oscillationAngle]: Number(normalized) });
             }
         }
         // TODO: Some heater firmware exposes oscmode/oscangle instead of oscon.
         // If neither feature is visible in the latest state, use oscon as the safe
         // legacy command and rely on debug logs/rawData to refine model support.
-        return await this.sendCommand({ [COMMANDS.oscillation]: this.toBoolean(value) });
+        return await this.sendAndApply({ [COMMANDS.oscillation]: this.toBoolean(value) });
+    }
+    async sendAndApply(desired) {
+        const result = await this.sendCommand(desired);
+        this.applyReportedUpdate(desired);
+        return result;
     }
     normalizeMode(value) {
         const mode = String(value).toLowerCase();
@@ -107,7 +125,7 @@ class DreoHeater extends DreoDevice_1.DreoDevice {
         return null;
     }
     hasProperty(key) {
-        return key in this.getProperties();
+        return this.hasCapability(key);
     }
     toInteger(value) {
         const parsed = Number.parseInt(String(value), 10);
