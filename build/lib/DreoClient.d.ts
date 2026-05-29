@@ -36,6 +36,7 @@ export declare class DreoClient {
     private legacyEndpoint?;
     private legacyAccessToken?;
     private legacyRegion;
+    private readonly legacyDeviceSerials;
     constructor(options: DreoClientOptions);
     get tokenInfo(): {
         endpoint?: string;
@@ -50,11 +51,15 @@ export declare class DreoClient {
     private legacyLogin;
     private getLegacyDevices;
     private getLegacyDeviceState;
+    private sendLegacyWebSocketCommand;
+    private sendLegacyWebSocketCommandOnce;
     private ensureLegacyAuthenticated;
     private legacyRequest;
     private ensureAuthenticated;
     private request;
     private extractDeviceItems;
+    private firstString;
+    private sleep;
     private baseParams;
     private preparePassword;
     private resolveEndpoint;

@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
 import crypto from "node:crypto";
+import WebSocket from "ws";
 
 export type DreoLogger = {
   debug(message: string): void;
@@ -74,6 +75,7 @@ export class DreoClient {
   private legacyEndpoint?: string;
   private legacyAccessToken?: string;
   private legacyRegion: "NA" | "EU" = "NA";
+  private readonly legacyDeviceSerials = new Set<string>();
 
   public constructor(options: DreoClientOptions) {
     this.email = options.email;
@@ -138,6 +140,10 @@ export class DreoClient {
 
     this.debugJson("Open API returned no devices; trying legacy app API. Payload", payload);
     const legacyDevices = await this.getLegacyDevices();
+    for (const device of legacyDevices) {
+      const serial = this.firstString(device, "deviceSn", "devicesn", "serialNumber", "serial_number", "sn");
+      if (serial) this.legacyDeviceSerials.add(serial);
+    }
     this.debug(`Legacy app API returned ${legacyDevices.length} devices`);
     return legacyDevices;
   }
@@ -166,6 +172,11 @@ export class DreoClient {
     }
 
     await this.ensureAuthenticated();
+    if (this.legacyDeviceSerials.has(deviceSn)) {
+      await this.sendLegacyWebSocketCommand(deviceSn, desired);
+      return { code: 0, data: { devicesn: deviceSn, desired, transport: "legacy-websocket" } };
+    }
+
     return await this.requestWithReauth<Record<string, any>>({
       url: `${this.requireEndpoint()}${ENDPOINTS.deviceControl}`,
       method: "POST",
@@ -259,6 +270,81 @@ export class DreoClient {
     const data = this.unwrapData(payload);
     if (this.isObject(data) && this.isObject(data.mixed)) return data.mixed;
     return this.isObject(data) ? data : {};
+  }
+
+  private async sendLegacyWebSocketCommand(deviceSn: string, desired: Record<string, any>): Promise<void> {
+    await this.ensureLegacyAuthenticated();
+    const region = this.legacyRegion === "EU" ? "eu" : "us";
+    const url = `wss://wsb-${region}.dreo-tech.com/websocket?accessToken=${encodeURIComponent(this.requireLegacyAccessToken())}&timestamp=${Date.now()}`;
+    const command = {
+      devicesn: deviceSn,
+      method: "control",
+      params: desired,
+      timestamp: String(Date.now()),
+    };
+
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      try {
+        await this.sendLegacyWebSocketCommandOnce(url, command, deviceSn);
+        return;
+      } catch (error) {
+        if (attempt >= 2) throw error;
+        this.logger.warn(`Dreo WebSocket command did not receive ACK; retrying (${attempt + 1}/2)`);
+        await this.sleep(1_500 * (attempt + 1));
+      }
+    }
+  }
+
+  private async sendLegacyWebSocketCommandOnce(url: string, command: Record<string, any>, deviceSn: string): Promise<void> {
+    this.debugJson("Sending legacy WebSocket command", { ...command, devicesn: deviceSn });
+    await new Promise<void>((resolve, reject) => {
+      const ws = new WebSocket(url);
+      let settled = false;
+      let pingTimer: NodeJS.Timeout | undefined;
+      const timeout = setTimeout(() => {
+        finish(new DreoApiError("Timed out waiting for Dreo WebSocket command ACK", { retryable: true }));
+      }, 8_000);
+
+      const finish = (error?: Error): void => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timeout);
+        if (pingTimer) clearInterval(pingTimer);
+        try {
+          ws.close();
+        } catch {
+          // Ignore close errors; the command outcome is already known.
+        }
+        if (error) reject(error);
+        else resolve();
+      };
+
+      ws.on("open", () => {
+        pingTimer = setInterval(() => {
+          if (ws.readyState === WebSocket.OPEN) ws.send("2");
+        }, 15_000);
+        ws.send(JSON.stringify(command));
+      });
+
+      ws.on("message", (data) => {
+        const raw = data.toString();
+        if (raw === "2" || raw === "3") return;
+        try {
+          const message = JSON.parse(raw) as Record<string, any>;
+          this.debugJson("Legacy WebSocket message", message);
+          if (message.devicesn === deviceSn && message.method === "control-report") {
+            finish();
+          }
+        } catch {
+          this.debug(`Ignoring non-JSON Dreo WebSocket message: ${raw}`);
+        }
+      });
+
+      ws.on("error", (error) => finish(new DreoApiError(`Dreo WebSocket command failed: ${error.message}`, { retryable: true })));
+      ws.on("close", () => {
+        if (!settled) finish(new DreoApiError("Dreo WebSocket closed before command ACK", { retryable: true }));
+      });
+    });
   }
 
   private async ensureLegacyAuthenticated(): Promise<void> {
@@ -365,6 +451,18 @@ export class DreoClient {
       }
     }
     return [];
+  }
+
+  private firstString(payload: Record<string, any>, ...keys: string[]): string | undefined {
+    for (const key of keys) {
+      const value = payload[key];
+      if (value !== undefined && value !== null && value !== "") return String(value);
+    }
+    return undefined;
+  }
+
+  private async sleep(ms: number): Promise<void> {
+    await new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   private baseParams(): Record<string, any> {
