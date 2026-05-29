@@ -146,6 +146,10 @@ Dreo does not provide a public official API. This adapter uses behavior discover
 
 ## Changelog
 
+### 0.0.11
+
+- Updated metadata after the first npm publication.
+
 ### 0.0.10
 
 - Prepared adapter metadata for official ioBroker repository submission.
@@ -165,5 +169,7 @@ Dreo does not provide a public official API. This adapter uses behavior discover
 - Initial native TypeScript adapter for Dreo Cloud devices.
 
 ## License
+
+Copyright (c) 2026 Alexander Tartler
 
 MIT License. See [LICENSE](LICENSE) for details.

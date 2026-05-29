@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "dreo",
-    "version": "0.0.10",
+    "version": "0.0.11",
     "titleLang": {
       "en": "Dreo",
       "de": "Dreo",
@@ -29,6 +29,19 @@
       "zh-cn": "Controls Dreo smart devices through the native Dreo Cloud API."
     },
     "news": {
+      "0.0.11": {
+        "en": "Updated metadata after the first npm publication.",
+        "de": "Metadaten nach der ersten npm-Veroeffentlichung aktualisiert.",
+        "ru": "Updated metadata after the first npm publication.",
+        "pt": "Updated metadata after the first npm publication.",
+        "nl": "Updated metadata after the first npm publication.",
+        "fr": "Updated metadata after the first npm publication.",
+        "it": "Updated metadata after the first npm publication.",
+        "es": "Updated metadata after the first npm publication.",
+        "pl": "Updated metadata after the first npm publication.",
+        "uk": "Updated metadata after the first npm publication.",
+        "zh-cn": "Updated metadata after the first npm publication."
+      },
       "0.0.10": {
         "en": "Prepared adapter metadata for official ioBroker repository submission.",
         "de": "Adapter-Metadaten fuer die offizielle ioBroker Repository-Aufnahme vorbereitet.",
@@ -41,19 +54,6 @@
         "pl": "Prepared adapter metadata for official ioBroker repository submission.",
         "uk": "Prepared adapter metadata for official ioBroker repository submission.",
         "zh-cn": "Prepared adapter metadata for official ioBroker repository submission."
-      },
-      "0.0.9": {
-        "en": "Added importable VIS heater widget template.",
-        "de": "Importierbare VIS-Heizgeraet-Vorlage hinzugefuegt.",
-        "ru": "Added importable VIS heater widget template.",
-        "pt": "Added importable VIS heater widget template.",
-        "nl": "Added importable VIS heater widget template.",
-        "fr": "Added importable VIS heater widget template.",
-        "it": "Added importable VIS heater widget template.",
-        "es": "Added importable VIS heater widget template.",
-        "pl": "Added importable VIS heater widget template.",
-        "uk": "Added importable VIS heater widget template.",
-        "zh-cn": "Added importable VIS heater widget template."
       }
     },
     "authors": ["Alexander Tartler"],
