@@ -73,7 +73,10 @@
       "help": "Enables more verbose Dreo API logging without logging passwords or full access tokens.",
       "newLine": true,
       "xs": 12,
-      "sm": 4
+      "sm": 4,
+      "md": 3,
+      "lg": 2,
+      "xl": 2
     }
   }
 }

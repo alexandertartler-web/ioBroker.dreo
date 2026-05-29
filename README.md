@@ -94,20 +94,13 @@ Unknown devices still get `info.*`, `status.power`, `control.power`, and complet
 
 During beta testing, install the adapter through the ioBroker Admin GitHub installer by entering this repository:
 
-```text
-alexandertartler-web/iobroker.dreo
-```
+`alexandertartler-web/ioBroker.dreo`
 
 After installation, create a Dreo instance, open the adapter instance config in ioBroker Admin, enter Dreo credentials, and start the instance.
 
 ## Test Anleitung
 
-Build check:
-
-```bash
-npm ci
-npm test
-```
+Build checks are executed by GitHub Actions for each push and pull request.
 
 ioBroker runtime test:
 

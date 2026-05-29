@@ -7,13 +7,13 @@
     "ioBroker Community"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/alexandertartler-web/iobroker.dreo",
+  "homepage": "https://github.com/alexandertartler-web/ioBroker.dreo",
   "bugs": {
-    "url": "https://github.com/alexandertartler-web/iobroker.dreo/issues"
+    "url": "https://github.com/alexandertartler-web/ioBroker.dreo/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/alexandertartler-web/iobroker.dreo.git"
+    "url": "https://github.com/alexandertartler-web/ioBroker.dreo.git"
   },
   "files": [
     "admin",
@@ -35,7 +35,7 @@
     "build": "tsc -p tsconfig.json",
     "watch": "tsc -w -p tsconfig.json",
     "test": "npm run build",
-    "check": "npx @iobroker/repochecker https://github.com/alexandertartler-web/iobroker.dreo main",
+    "check": "npx @iobroker/repochecker https://github.com/alexandertartler-web/ioBroker.dreo main",
     "prepack": "npm run build"
   },
   "dependencies": {
@@ -44,7 +44,7 @@
     "ws": "^8.21.0"
   },
   "devDependencies": {
-    "@iobroker/testing": "5.2.2",
+    "@iobroker/testing": "^5.2.2",
     "@types/node": "^20.17.57",
     "@types/ws": "^8.18.1",
     "typescript": "^5.8.3"

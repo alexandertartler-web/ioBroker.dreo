@@ -64,7 +64,7 @@
     },
     "platform": "Javascript/Node.js",
     "icon": "dreo.png",
-    "extIcon": "https://raw.githubusercontent.com/alexandertartler-web/iobroker.dreo/main/admin/dreo.png",
+    "extIcon": "https://raw.githubusercontent.com/alexandertartler-web/ioBroker.dreo/main/admin/dreo.png",
     "mode": "daemon",
     "enabled": false,
     "compact": true,
@@ -80,11 +80,11 @@
     ],
     "globalDependencies": [
       {
-        "admin": ">=7.6.17"
+        "admin": ">=7.6.20"
       }
     ],
     "type": "climate-control",
-    "readme": "https://github.com/alexandertartler-web/iobroker.dreo/blob/main/README.md",
+    "readme": "https://github.com/alexandertartler-web/ioBroker.dreo/blob/main/README.md",
     "tier": 3,
     "loglevel": "info"
   },
