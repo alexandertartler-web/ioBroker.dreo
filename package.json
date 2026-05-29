@@ -21,11 +21,10 @@
     "vis",
     "io-package.json",
     "README.md",
-    "CHANGELOG.md",
     "LICENSE"
   ],
   "keywords": [
-    "iobroker",
+    "ioBroker",
     "dreo",
     "heater",
     "smarthome"
@@ -40,20 +39,17 @@
     "prepack": "npm run build"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^3.2.3",
-    "axios": "^1.9.0",
+    "@iobroker/adapter-core": "^3.3.2",
+    "axios": "^1.16.1",
     "ws": "^8.21.0"
   },
   "devDependencies": {
+    "@iobroker/testing": "5.2.2",
     "@types/node": "^20.17.57",
     "@types/ws": "^8.18.1",
     "typescript": "^5.8.3"
   },
   "engines": {
-    "node": ">=18"
-  },
-  "iobroker": {
-    "adminTab": false,
-    "supportsDocker": true
+    "node": ">=20"
   }
 }

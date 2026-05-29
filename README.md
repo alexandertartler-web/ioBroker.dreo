@@ -90,37 +90,22 @@ Unknown devices still get `info.*`, `status.power`, `control.power`, and complet
 - `deviceFilter`: optional comma-separated device serial numbers, device IDs, names, or models
 - `debugMode`: verbose adapter-side API/debug logging without secrets
 
-## Installation in `/opt/iobroker`
+## Installation
 
-Copy or clone this folder to the ioBroker host, then run:
+During beta testing, install the adapter through the ioBroker Admin GitHub installer by entering this repository:
 
-```bash
-cd /opt/iobroker
-npm install /path/to/iobroker.dreo
-iobroker upload dreo
-iobroker add dreo
+```text
+alexandertartler-web/iobroker.dreo
 ```
 
-For local development directly from the adapter folder:
-
-```bash
-cd /path/to/iobroker.dreo
-npm install
-npm run build
-cd /opt/iobroker
-npm install /path/to/iobroker.dreo
-iobroker upload dreo
-iobroker add dreo
-```
-
-Then open the adapter instance config in ioBroker Admin, enter Dreo credentials, and start the instance.
+After installation, create a Dreo instance, open the adapter instance config in ioBroker Admin, enter Dreo credentials, and start the instance.
 
 ## Test Anleitung
 
 Build check:
 
 ```bash
-npm install
+npm ci
 npm test
 ```
 
@@ -162,7 +147,6 @@ Replace `__DREO_DEVICE__` with your device object path, then import it in the VI
 
 ```text
 admin/jsonConfig.json
-CHANGELOG.md
 io-package.json
 LICENSE
 package.json
@@ -178,3 +162,27 @@ vis/dreo-heater-widget.json
 ## Notes
 
 Dreo does not provide a public official API. This adapter uses behavior discovered by community Python integrations and should be tested carefully with real devices.
+
+## Changelog
+
+### 0.0.10
+
+- Prepared adapter metadata for official ioBroker repository submission.
+- Added license, changelog, and GitHub Actions test workflow.
+- Fixed temperature unit display encoding.
+
+### 0.0.9
+
+- Added importable VIS heater widget template.
+
+### 0.0.8
+
+- Improved Dreo state handling and Celsius/Fahrenheit conversion.
+
+### 0.0.1
+
+- Initial native TypeScript adapter for Dreo Cloud devices.
+
+## License
+
+MIT License. See [LICENSE](LICENSE) for details.

@@ -2,25 +2,71 @@
   "common": {
     "name": "dreo",
     "version": "0.0.10",
-    "title": "Dreo",
     "titleLang": {
       "en": "Dreo",
-      "de": "Dreo"
+      "de": "Dreo",
+      "ru": "Dreo",
+      "pt": "Dreo",
+      "nl": "Dreo",
+      "fr": "Dreo",
+      "it": "Dreo",
+      "es": "Dreo",
+      "pl": "Dreo",
+      "uk": "Dreo",
+      "zh-cn": "Dreo"
     },
     "desc": {
       "en": "Controls Dreo smart devices through the native Dreo Cloud API.",
-      "de": "Steuert Dreo Smart Devices ueber die native Dreo Cloud API."
+      "de": "Steuert Dreo Smart Devices ueber die native Dreo Cloud API.",
+      "ru": "Controls Dreo smart devices through the native Dreo Cloud API.",
+      "pt": "Controls Dreo smart devices through the native Dreo Cloud API.",
+      "nl": "Controls Dreo smart devices through the native Dreo Cloud API.",
+      "fr": "Controls Dreo smart devices through the native Dreo Cloud API.",
+      "it": "Controls Dreo smart devices through the native Dreo Cloud API.",
+      "es": "Controls Dreo smart devices through the native Dreo Cloud API.",
+      "pl": "Controls Dreo smart devices through the native Dreo Cloud API.",
+      "uk": "Controls Dreo smart devices through the native Dreo Cloud API.",
+      "zh-cn": "Controls Dreo smart devices through the native Dreo Cloud API."
+    },
+    "news": {
+      "0.0.10": {
+        "en": "Prepared adapter metadata for official ioBroker repository submission.",
+        "de": "Adapter-Metadaten fuer die offizielle ioBroker Repository-Aufnahme vorbereitet.",
+        "ru": "Prepared adapter metadata for official ioBroker repository submission.",
+        "pt": "Prepared adapter metadata for official ioBroker repository submission.",
+        "nl": "Prepared adapter metadata for official ioBroker repository submission.",
+        "fr": "Prepared adapter metadata for official ioBroker repository submission.",
+        "it": "Prepared adapter metadata for official ioBroker repository submission.",
+        "es": "Prepared adapter metadata for official ioBroker repository submission.",
+        "pl": "Prepared adapter metadata for official ioBroker repository submission.",
+        "uk": "Prepared adapter metadata for official ioBroker repository submission.",
+        "zh-cn": "Prepared adapter metadata for official ioBroker repository submission."
+      },
+      "0.0.9": {
+        "en": "Added importable VIS heater widget template.",
+        "de": "Importierbare VIS-Heizgeraet-Vorlage hinzugefuegt.",
+        "ru": "Added importable VIS heater widget template.",
+        "pt": "Added importable VIS heater widget template.",
+        "nl": "Added importable VIS heater widget template.",
+        "fr": "Added importable VIS heater widget template.",
+        "it": "Added importable VIS heater widget template.",
+        "es": "Added importable VIS heater widget template.",
+        "pl": "Added importable VIS heater widget template.",
+        "uk": "Added importable VIS heater widget template.",
+        "zh-cn": "Added importable VIS heater widget template."
+      }
     },
     "authors": ["Alexander Tartler"],
-    "keywords": ["dreo", "heater", "smart home", "cloud"],
-    "license": "MIT",
+    "keywords": ["dreo", "heater", "cloud"],
+    "licenseInformation": {
+      "type": "free",
+      "license": "MIT"
+    },
     "platform": "Javascript/Node.js",
-    "main": "build/main.js",
     "icon": "dreo.png",
     "extIcon": "https://raw.githubusercontent.com/alexandertartler-web/iobroker.dreo/main/admin/dreo.png",
     "mode": "daemon",
     "enabled": false,
-    "materialize": true,
     "compact": true,
     "connectionType": "cloud",
     "dataSource": "poll",
@@ -29,21 +75,21 @@
     },
     "dependencies": [
       {
-        "js-controller": ">=5.0.0"
+        "js-controller": ">=6.0.11"
       }
     ],
     "globalDependencies": [
       {
-        "admin": ">=6.17.0"
+        "admin": ">=7.6.17"
       }
     ],
-    "encryptedNative": ["password"],
-    "protectedNative": ["password"],
     "type": "climate-control",
     "readme": "https://github.com/alexandertartler-web/iobroker.dreo/blob/main/README.md",
     "tier": 3,
     "loglevel": "info"
   },
+  "encryptedNative": ["password"],
+  "protectedNative": ["password"],
   "native": {
     "email": "",
     "password": "",

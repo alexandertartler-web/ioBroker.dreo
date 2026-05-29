@@ -6,14 +6,20 @@
       "label": "Dreo email",
       "newLine": true,
       "xs": 12,
-      "sm": 8
+      "sm": 8,
+      "md": 6,
+      "lg": 4,
+      "xl": 4
     },
     "password": {
       "type": "password",
       "label": "Dreo password",
       "newLine": true,
       "xs": 12,
-      "sm": 8
+      "sm": 8,
+      "md": 6,
+      "lg": 4,
+      "xl": 4
     },
     "pollingInterval": {
       "type": "number",
@@ -23,7 +29,10 @@
       "default": 60,
       "newLine": true,
       "xs": 12,
-      "sm": 4
+      "sm": 4,
+      "md": 3,
+      "lg": 2,
+      "xl": 2
     },
     "deviceFilter": {
       "type": "text",
@@ -31,7 +40,10 @@
       "help": "Comma-separated device serial numbers or device IDs. Leave empty to include all devices.",
       "newLine": true,
       "xs": 12,
-      "sm": 8
+      "sm": 8,
+      "md": 6,
+      "lg": 4,
+      "xl": 4
     },
     "temperatureUnit": {
       "type": "select",
@@ -40,6 +52,9 @@
       "newLine": true,
       "xs": 12,
       "sm": 4,
+      "md": 3,
+      "lg": 2,
+      "xl": 2,
       "options": [
         {
           "label": "Celsius",
