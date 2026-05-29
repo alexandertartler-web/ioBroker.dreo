@@ -151,6 +151,11 @@ iobroker state get dreo.0.info.connection
 
 If commands do not affect a device, inspect `info.rawData` and debug logs. Dreo firmware variants may expose oscillation as `oscon`, `oscangle`, or `oscmode`; the adapter chooses the visible property first and falls back to `oscon`.
 
+## VIS Template
+
+An importable VIS widget template is available in `vis/dreo-heater-widget.json`.
+Replace `__DREO_DEVICE__` with your device object path, then import it in the VIS editor via **Widgets importieren**.
+
 ## Project Structure
 
 ```text
