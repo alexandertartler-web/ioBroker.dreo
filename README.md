@@ -90,13 +90,9 @@ Unknown devices still get `info.*`, `status.power`, `control.power`, and complet
 - `deviceFilter`: optional comma-separated device serial numbers, device IDs, names, or models
 - `debugMode`: verbose adapter-side API/debug logging without secrets
 
-## Installation
+## Setup
 
-During beta testing, install the adapter through the ioBroker Admin GitHub installer by entering this repository:
-
-`alexandertartler-web/ioBroker.dreo`
-
-After installation, create a Dreo instance, open the adapter instance config in ioBroker Admin, enter Dreo credentials, and start the instance.
+Create a Dreo adapter instance in ioBroker Admin, enter the Dreo credentials, choose the temperature unit, and start the instance.
 
 ## Test Anleitung
 
