@@ -123,6 +123,8 @@ https://raw.githubusercontent.com/alexandertartler-web/iobroker.dreo/main/reposi
 
 After every released version bump, ioBroker can compare the installed adapter version with the version from this custom repository. If the Admin page still shows the old version, reload the repository list or restart Admin.
 
+Do not use this `repository.json` URL in the "Install from custom URL" dialog. That dialog expects a package archive or GitHub repository URL. Use the repository URL only in ioBroker's repository settings or with `iobroker update <repository-url>`.
+
 ## Test Anleitung
 
 Build check:

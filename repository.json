@@ -1,6 +1,7 @@
 {
   "dreo": {
     "meta": "https://raw.githubusercontent.com/alexandertartler-web/iobroker.dreo/main/io-package.json",
+    "url": "https://github.com/alexandertartler-web/iobroker.dreo/tarball/main",
     "icon": "https://raw.githubusercontent.com/alexandertartler-web/iobroker.dreo/main/admin/dreo.png",
     "type": "climate-control"
   }
