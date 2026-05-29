@@ -75,7 +75,7 @@ class DreoAdapter extends utils.Adapter {
       const rawDevices = this.filterDevices(await this.client.getDevices());
 
       for (const rawDevice of rawDevices) {
-        const device = this.createDevice(rawDevice);
+        const device = this.createDreoDevice(rawDevice);
         const path = `devices.${this.sanitizeId(device.info.id)}`;
         this.managedDevices.set(path, { path, device });
 
@@ -150,7 +150,7 @@ class DreoAdapter extends utils.Adapter {
     }
   }
 
-  private createDevice(rawDevice: DreoRawDevice): DreoDevice {
+  private createDreoDevice(rawDevice: DreoRawDevice): DreoDevice {
     const normalized = DreoDevice.normalizeDevice(rawDevice);
     const candidate = new DreoDevice(rawDevice, this.client!);
     if (candidate.isHeaterLike) return new DreoHeater(rawDevice, this.client!);
