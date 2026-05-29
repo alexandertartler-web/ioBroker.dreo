@@ -113,6 +113,16 @@ iobroker add dreo
 
 Then open the adapter instance config in ioBroker Admin, enter Dreo credentials, and start the instance.
 
+## Custom ioBroker Repository
+
+For update detection during development, add this custom repository URL in ioBroker Admin:
+
+```text
+https://raw.githubusercontent.com/alexandertartler-web/iobroker.dreo/main/repository.json
+```
+
+After every released version bump, ioBroker can compare the installed adapter version with the version from this custom repository. If the Admin page still shows the old version, reload the repository list or restart Admin.
+
 ## Test Anleitung
 
 Build check:

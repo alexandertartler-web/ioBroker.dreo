@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "dreo",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "title": "Dreo",
     "titleLang": {
       "en": "Dreo",
@@ -16,6 +16,8 @@
     "license": "MIT",
     "platform": "Javascript/Node.js",
     "main": "build/main.js",
+    "icon": "dreo.png",
+    "extIcon": "https://raw.githubusercontent.com/alexandertartler-web/iobroker.dreo/main/admin/dreo.png",
     "mode": "daemon",
     "enabled": false,
     "materialize": true,
@@ -38,7 +40,7 @@
     "encryptedNative": ["password"],
     "protectedNative": ["password"],
     "type": "climate-control",
-    "readme": "https://github.com/iobroker-community-adapters/ioBroker.dreo/blob/main/README.md",
+    "readme": "https://github.com/alexandertartler-web/iobroker.dreo/blob/main/README.md",
     "loglevel": "info"
   },
   "native": {

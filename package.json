@@ -1,13 +1,13 @@
 {
   "name": "iobroker.dreo",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "ioBroker adapter for Dreo smart devices using the native Dreo Cloud API.",
   "author": "ioBroker Community",
   "license": "MIT",
-  "homepage": "https://github.com/iobroker-community-adapters/ioBroker.dreo",
+  "homepage": "https://github.com/alexandertartler-web/iobroker.dreo",
   "repository": {
     "type": "git",
-    "url": "https://github.com/iobroker-community-adapters/ioBroker.dreo.git"
+    "url": "https://github.com/alexandertartler-web/iobroker.dreo.git"
   },
   "keywords": [
     "iobroker",
