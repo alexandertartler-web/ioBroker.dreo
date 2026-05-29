@@ -4,6 +4,8 @@ Native ioBroker adapter for Dreo smart devices. The first supported device famil
 
 This adapter does **not** use Python, Home Assistant, or a subprocess bridge. The Dreo Cloud API logic was ported to TypeScript from the public Python projects `hass-dreo`, `pydreo-client`, and `hass-dreoverse`.
 
+Dreo manufacturer website: https://www.dreo.com/
+
 ## Current Scope
 
 - Login against Dreo Cloud with email/password
@@ -160,7 +162,9 @@ Replace `__DREO_DEVICE__` with your device object path, then import it in the VI
 
 ```text
 admin/jsonConfig.json
+CHANGELOG.md
 io-package.json
+LICENSE
 package.json
 README.md
 src/main.ts
@@ -168,6 +172,7 @@ src/lib/DreoClient.ts
 src/lib/DreoDevice.ts
 src/lib/DreoHeater.ts
 tsconfig.json
+vis/dreo-heater-widget.json
 ```
 
 ## Notes

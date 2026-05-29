@@ -322,7 +322,7 @@ class DreoAdapter extends utils.Adapter {
         return (this.config.temperatureUnit ?? "celsius") === "celsius";
     }
     temperatureUnitSymbol() {
-        return this.useCelsius() ? "°C" : "°F";
+        return this.useCelsius() ? "\u00b0C" : "\u00b0F";
     }
     clientLogger() {
         return {

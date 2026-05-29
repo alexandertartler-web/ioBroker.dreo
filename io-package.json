@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "dreo",
-    "version": "0.0.9",
+    "version": "0.0.10",
     "title": "Dreo",
     "titleLang": {
       "en": "Dreo",
@@ -11,7 +11,7 @@
       "en": "Controls Dreo smart devices through the native Dreo Cloud API.",
       "de": "Steuert Dreo Smart Devices ueber die native Dreo Cloud API."
     },
-    "authors": ["ioBroker Community"],
+    "authors": ["Alexander Tartler"],
     "keywords": ["dreo", "heater", "smart home", "cloud"],
     "license": "MIT",
     "platform": "Javascript/Node.js",
@@ -41,6 +41,7 @@
     "protectedNative": ["password"],
     "type": "climate-control",
     "readme": "https://github.com/alexandertartler-web/iobroker.dreo/blob/main/README.md",
+    "tier": 3,
     "loglevel": "info"
   },
   "native": {
