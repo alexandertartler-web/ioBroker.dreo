@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "dreo",
-    "version": "0.0.11",
+    "version": "0.0.12",
     "titleLang": {
       "en": "Dreo",
       "de": "Dreo",
@@ -29,6 +29,19 @@
       "zh-cn": "Controls Dreo smart devices through the native Dreo Cloud API."
     },
     "news": {
+      "0.0.12": {
+        "en": "Added a native VIS 1 draggable Dreo heater widget.",
+        "de": "Natives VIS 1 Drag-and-drop-Widget fuer Dreo-Heizgeraete hinzugefuegt.",
+        "ru": "Added a native VIS 1 draggable Dreo heater widget.",
+        "pt": "Added a native VIS 1 draggable Dreo heater widget.",
+        "nl": "Added a native VIS 1 draggable Dreo heater widget.",
+        "fr": "Added a native VIS 1 draggable Dreo heater widget.",
+        "it": "Added a native VIS 1 draggable Dreo heater widget.",
+        "es": "Added a native VIS 1 draggable Dreo heater widget.",
+        "pl": "Added a native VIS 1 draggable Dreo heater widget.",
+        "uk": "Added a native VIS 1 draggable Dreo heater widget.",
+        "zh-cn": "Added a native VIS 1 draggable Dreo heater widget."
+      },
       "0.0.11": {
         "en": "Updated metadata after the first npm publication.",
         "de": "Metadaten nach der ersten npm-Veroeffentlichung aktualisiert.",
@@ -73,6 +86,7 @@
     "adminUI": {
       "config": "json"
     },
+    "restartAdapters": ["vis"],
     "dependencies": [
       {
         "js-controller": ">=6.0.11"

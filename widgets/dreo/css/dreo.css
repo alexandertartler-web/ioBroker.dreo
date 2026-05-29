@@ -1,0 +1,169 @@
+.dreo-vis-widget,
+.dreo-vis-widget * {
+  box-sizing: border-box;
+}
+
+.dreo-vis-card {
+  --dreo-accent: #ff7040;
+  width: 100%;
+  height: 100%;
+  min-width: 300px;
+  min-height: 300px;
+  padding: 18px;
+  border-radius: 18px;
+  background: #15181c;
+  color: #f7f9fb;
+  font-family: Arial, Helvetica, sans-serif;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.dreo-vis-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dreo-vis-title {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.dreo-vis-subtitle,
+.dreo-vis-foot {
+  color: #9aa4af;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.dreo-vis-mode {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #d6dee6;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.dreo-vis-temp {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.dreo-vis-current {
+  font-size: 58px;
+  line-height: 0.95;
+  font-weight: 800;
+}
+
+.dreo-vis-current small {
+  color: #aeb8c2;
+  font-size: 20px;
+  margin-left: 2px;
+}
+
+.dreo-vis-target {
+  margin-left: auto;
+  color: #cfd7df;
+  text-align: right;
+  font-size: 12px;
+}
+
+.dreo-vis-target b {
+  display: block;
+  margin-top: 4px;
+  color: #fff;
+  font-size: 22px;
+}
+
+.dreo-vis-status {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.dreo-vis-status div {
+  min-width: 0;
+  padding: 9px 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.dreo-vis-status span {
+  display: block;
+  color: #9aa4af;
+  font-size: 11px;
+}
+
+.dreo-vis-status b {
+  display: block;
+  overflow: hidden;
+  margin-top: 4px;
+  font-size: 15px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dreo-vis-controls {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.dreo-vis-controls button {
+  height: 36px;
+  border: 0;
+  border-radius: 9px;
+  background: #27313a;
+  color: #f7f9fb;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dreo-vis-controls button:hover {
+  background: #34414c;
+}
+
+.dreo-vis-controls button:first-child {
+  background: var(--dreo-accent);
+  color: #151515;
+}
+
+.dreo-vis-preview {
+  width: 110px;
+  height: 110px;
+  padding: 10px;
+  border-radius: 14px;
+  background: #15181c;
+  color: #f7f9fb;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.dreo-vis-preview-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #ff7040;
+  color: #151515;
+  text-align: center;
+  line-height: 28px;
+  font-weight: 800;
+}
+
+.dreo-vis-preview-title {
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.dreo-vis-preview-temp {
+  margin-top: 8px;
+  font-size: 26px;
+  font-weight: 800;
+}

@@ -124,6 +124,11 @@ If commands do not affect a device, inspect `info.rawData` and debug logs. Dreo 
 An importable VIS widget template is available in `vis/dreo-heater-widget.json`.
 Replace `__DREO_DEVICE__` with your device object path, then import it in the VIS editor via **Widgets importieren**.
 
+## VIS Widget
+
+The adapter also includes a native VIS 1 widget set named `dreo`.
+After uploading the adapter files and restarting/opening the VIS editor, drag the `Dreo heater` widget into a view and select any state below the target Dreo device, for example `dreo.0.devices.<device>.status.power`.
+
 ## Project Structure
 
 ```text
@@ -138,6 +143,9 @@ src/lib/DreoDevice.ts
 src/lib/DreoHeater.ts
 tsconfig.json
 vis/dreo-heater-widget.json
+widgets/dreo.html
+widgets/dreo/css/dreo.css
+widgets/dreo/js/dreo.js
 ```
 
 ## Notes
@@ -145,6 +153,10 @@ vis/dreo-heater-widget.json
 Dreo does not provide a public official API. This adapter uses behavior discovered by community Python integrations and should be tested carefully with real devices.
 
 ## Changelog
+
+### 0.0.12
+
+- Added a native VIS 1 draggable Dreo heater widget.
 
 ### 0.0.11
 

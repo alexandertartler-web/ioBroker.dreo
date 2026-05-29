@@ -1,0 +1,52 @@
+<!-- ioBroker.vis Dreo Widget-Set -->
+<link rel="stylesheet" href="widgets/dreo/css/dreo.css" />
+<script type="text/javascript" src="widgets/dreo/js/dreo.js"></script>
+
+<script
+    id="tplDreoHeater"
+    type="text/ejs"
+    class="vis-tpl"
+    data-vis-set="dreo"
+    data-vis-type="ctrl"
+    data-vis-name="Dreo heater"
+    data-vis-prev='<div class="vis-widget_prev dreo-vis-preview"><div class="dreo-vis-preview-icon">D</div><div class="dreo-vis-preview-title">Dreo</div><div class="dreo-vis-preview-temp">21&deg;</div></div>'
+    data-vis-attrs="oid/id;title/text;unit/text;showControls/checkbox;accent/color"
+>
+    <div class="vis-widget <%== this.data.attr('class') %> dreo-vis-widget" id="<%= this.data.attr('wid') %>">
+        <div class="dreo-vis-card" style="--dreo-accent:<%= this.data.attr('accent') || '#ff7040' %>">
+            <div class="dreo-vis-head">
+                <div>
+                    <div class="dreo-vis-title"><%= this.data.attr('title') || 'Dreo heater' %></div>
+                    <div class="dreo-vis-subtitle" data-dreo-field="model">-</div>
+                </div>
+                <div class="dreo-vis-mode" data-dreo-field="mode">-</div>
+            </div>
+            <div class="dreo-vis-temp">
+                <div class="dreo-vis-current"><span data-dreo-field="currentTemperature">-</span><small><%= this.data.attr('unit') || '&deg;' %></small></div>
+                <div class="dreo-vis-target">Target <b><span data-dreo-field="targetTemperature">-</span><%= this.data.attr('unit') || '&deg;' %></b></div>
+            </div>
+            <div class="dreo-vis-status">
+                <div><span>Power</span><b data-dreo-field="power">-</b></div>
+                <div><span>Level</span><b data-dreo-field="fanSpeed">-</b></div>
+                <div><span>Online</span><b data-dreo-field="online">-</b></div>
+                <div><span>Timer</span><b data-dreo-field="timer">-</b></div>
+            </div>
+            <% if (this.data.attr('showControls') !== false && this.data.attr('showControls') !== 'false') { %>
+            <div class="dreo-vis-controls">
+                <button type="button" data-dreo-action="power-on">On</button>
+                <button type="button" data-dreo-action="power-off">Off</button>
+                <button type="button" data-dreo-action="temp-down">-</button>
+                <button type="button" data-dreo-action="temp-up">+</button>
+                <button type="button" data-dreo-action="mode-hotair">Heat</button>
+                <button type="button" data-dreo-action="mode-eco">Eco</button>
+                <button type="button" data-dreo-action="level-1">H1</button>
+                <button type="button" data-dreo-action="level-2">H2</button>
+                <button type="button" data-dreo-action="level-3">H3</button>
+                <button type="button" data-dreo-action="oscillation">Swing</button>
+            </div>
+            <% } %>
+            <div class="dreo-vis-foot" data-dreo-field="name">Select Dreo object</div>
+        </div>
+    </div>
+    <% vis.binds.dreo.heater(this.data.wid, this.view, this.data); %>
+</script>
