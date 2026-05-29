@@ -23,8 +23,12 @@ class DreoApiError extends Error {
 exports.DreoApiError = DreoApiError;
 const BASE_URL = "https://open-api-us.dreo-tech.com";
 const EU_BASE_URL = "https://open-api-eu.dreo-tech.com";
+const LEGACY_URL = "https://app-api-us.dreo-tech.com";
+const LEGACY_EU_URL = "https://app-api-eu.dreo-tech.com";
 const CLIENT_ID = "89ef537b2202481aaaf9077068bcb0c9";
 const CLIENT_SECRET = "41b20a1f60e9499e89c8646c31f93ea1";
+const LEGACY_CLIENT_ID = "7de37c362ee54dcf9c4561812309347a";
+const LEGACY_CLIENT_SECRET = "32dfa0764f25451d99f94e1693498791";
 const USER_AGENT = "openapi/1.0.0";
 const API_VERSION = "1.0.0";
 const ENDPOINTS = {
@@ -32,6 +36,8 @@ const ENDPOINTS = {
     devices: "/api/v2/device/list",
     deviceState: "/api/v2/device/state",
     deviceControl: "/api/v2/device/control",
+    legacyDevices: "/api/v2/user-device/device/list",
+    legacyDeviceState: "/api/user-device/device/state",
 };
 class DreoClient {
     email;
@@ -41,6 +47,9 @@ class DreoClient {
     http;
     endpoint;
     accessToken;
+    legacyEndpoint;
+    legacyAccessToken;
+    legacyRegion = "NA";
     constructor(options) {
         this.email = options.email;
         this.password = options.password;
@@ -90,28 +99,34 @@ class DreoClient {
             method: "GET",
             params: this.baseParams(),
         });
-        const data = this.unwrapData(payload);
-        if (Array.isArray(data))
-            return data.filter(this.isObject);
-        if (this.isObject(data)) {
-            for (const key of ["devices", "deviceList", "list", "items", "records"]) {
-                if (Array.isArray(data[key]))
-                    return data[key].filter(this.isObject);
-            }
+        const devices = this.extractDeviceItems(payload);
+        if (devices.length) {
+            this.debug(`Open API returned ${devices.length} devices`);
+            return devices;
         }
-        this.logger.warn("Dreo device list response did not contain a known device array");
-        this.debugJson("Unexpected device list payload", payload);
-        return [];
+        this.debugJson("Open API returned no devices; trying legacy app API. Payload", payload);
+        const legacyDevices = await this.getLegacyDevices();
+        this.debug(`Legacy app API returned ${legacyDevices.length} devices`);
+        return legacyDevices;
     }
     async getDeviceState(deviceSn) {
         await this.ensureAuthenticated();
-        const payload = await this.requestWithReauth({
-            url: `${this.requireEndpoint()}${ENDPOINTS.deviceState}`,
-            method: "GET",
-            params: { ...this.baseParams(), deviceSn },
-        });
-        const data = this.unwrapData(payload);
-        return this.isObject(data) ? data : {};
+        try {
+            const payload = await this.requestWithReauth({
+                url: `${this.requireEndpoint()}${ENDPOINTS.deviceState}`,
+                method: "GET",
+                params: { ...this.baseParams(), deviceSn },
+            });
+            const data = this.unwrapData(payload);
+            if (this.isObject(data) && Object.keys(data).length)
+                return data;
+            this.debugJson(`Open API state for ${deviceSn} was empty; trying legacy app API. Payload`, payload);
+        }
+        catch (error) {
+            this.logger.warn(`Open API state request failed for ${deviceSn}; trying legacy app API`);
+            this.debugJson("Open API state error", this.errorToObject(error));
+        }
+        return await this.getLegacyDeviceState(deviceSn);
     }
     async updateDeviceState(deviceSn, desired) {
         if (!Object.keys(desired).length) {
@@ -143,17 +158,123 @@ class DreoClient {
             return await this.request(config);
         }
     }
+    async legacyLogin(region = this.legacyRegion) {
+        const endpoint = region === "EU" ? LEGACY_EU_URL : LEGACY_URL;
+        const payload = await this.request({
+            url: `${endpoint}${ENDPOINTS.login}`,
+            method: "POST",
+            params: { timestamp: Date.now() },
+            data: {
+                acceptLanguage: "en",
+                client_id: LEGACY_CLIENT_ID,
+                client_secret: LEGACY_CLIENT_SECRET,
+                email: this.email,
+                encrypt: "ciphertext",
+                grant_type: "email-password",
+                himei: "faede31549d649f58864093158787ec9",
+                password: this.preparePassword(this.password),
+                scope: "all",
+            },
+            skipAuth: true,
+            legacy: true,
+        });
+        if (payload.region && payload.region !== region) {
+            const reportedRegion = payload.region.toUpperCase() === "EU" ? "EU" : "NA";
+            this.debug(`Legacy login reported region ${reportedRegion}; retrying against matching app endpoint`);
+            this.legacyRegion = reportedRegion;
+            if (reportedRegion !== region)
+                return await this.legacyLogin(reportedRegion);
+        }
+        this.legacyAccessToken = payload.access_token ?? payload.token;
+        if (!this.legacyAccessToken) {
+            throw new DreoApiError("Legacy Dreo login response did not contain an access token", { authError: true });
+        }
+        this.legacyEndpoint = endpoint;
+    }
+    async getLegacyDevices() {
+        await this.ensureLegacyAuthenticated();
+        const payload = await this.legacyRequest({
+            url: `${this.requireLegacyEndpoint()}${ENDPOINTS.legacyDevices}`,
+            method: "GET",
+            params: {
+                acceptLanguage: "en",
+                method: "devices",
+                pageNo: "1",
+                pageSize: "100",
+                timestamp: Date.now(),
+            },
+        });
+        const devices = this.extractDeviceItems(payload);
+        if (!devices.length)
+            this.debugJson("Legacy app API returned no recognizable device list. Payload", payload);
+        return devices;
+    }
+    async getLegacyDeviceState(deviceSn) {
+        await this.ensureLegacyAuthenticated();
+        const payload = await this.legacyRequest({
+            url: `${this.requireLegacyEndpoint()}${ENDPOINTS.legacyDeviceState}`,
+            method: "GET",
+            params: {
+                acceptLanguage: "en",
+                deviceSn,
+                timestamp: Date.now(),
+            },
+        });
+        const data = this.unwrapData(payload);
+        if (this.isObject(data) && this.isObject(data.mixed))
+            return data.mixed;
+        return this.isObject(data) ? data : {};
+    }
+    async ensureLegacyAuthenticated() {
+        if (!this.legacyAccessToken || !this.legacyEndpoint) {
+            await this.legacyLogin();
+        }
+    }
+    async legacyRequest(config) {
+        await this.ensureLegacyAuthenticated();
+        try {
+            return await this.request({
+                ...config,
+                legacy: true,
+                legacyAuth: true,
+            });
+        }
+        catch (error) {
+            if (!(error instanceof DreoApiError) || !error.authError)
+                throw error;
+            this.logger.warn("Legacy Dreo token was rejected; refreshing session and retrying once");
+            this.legacyAccessToken = undefined;
+            this.legacyEndpoint = undefined;
+            await this.legacyLogin();
+            return await this.request({
+                ...config,
+                legacy: true,
+                legacyAuth: true,
+            });
+        }
+    }
     async ensureAuthenticated() {
         if (!this.accessToken || !this.endpoint) {
             await this.login();
         }
     }
     async request(config) {
-        const headers = {
-            "Content-Type": "application/json",
-            UA: USER_AGENT,
-        };
-        if (!config.skipAuth) {
+        const headers = config.legacy
+            ? {
+                ua: "dreo/2.8.2",
+                lang: "en",
+                "content-type": "application/json; charset=UTF-8",
+                "accept-encoding": "gzip",
+                "user-agent": "okhttp/4.9.1",
+            }
+            : {
+                "Content-Type": "application/json",
+                UA: USER_AGENT,
+            };
+        if (config.legacyAuth) {
+            headers.authorization = `Bearer ${this.requireLegacyAccessToken()}`;
+        }
+        else if (!config.skipAuth) {
             headers.Authorization = `Bearer ${this.stripTokenRegion(this.requireAccessToken())}`;
         }
         try {
@@ -198,6 +319,18 @@ class DreoClient {
             throw new DreoApiError(`Dreo request failed: ${axiosError.message ?? String(error)}`, { retryable: true });
         }
     }
+    extractDeviceItems(payload) {
+        const data = this.unwrapData(payload);
+        if (Array.isArray(data))
+            return data.filter(this.isObject);
+        if (this.isObject(data)) {
+            for (const key of ["devices", "deviceList", "list", "items", "records"]) {
+                if (Array.isArray(data[key]))
+                    return data[key].filter(this.isObject);
+            }
+        }
+        return [];
+    }
     baseParams() {
         return {
             timestamp: Date.now(),
@@ -228,6 +361,16 @@ class DreoClient {
             throw new DreoApiError("Dreo access token is unavailable; login has not completed", { authError: true });
         return this.accessToken;
     }
+    requireLegacyEndpoint() {
+        if (!this.legacyEndpoint)
+            throw new DreoApiError("Legacy Dreo endpoint is unavailable; login has not completed", { authError: true });
+        return this.legacyEndpoint;
+    }
+    requireLegacyAccessToken() {
+        if (!this.legacyAccessToken)
+            throw new DreoApiError("Legacy Dreo access token is unavailable; login has not completed", { authError: true });
+        return this.legacyAccessToken;
+    }
     unwrapData(payload) {
         return this.isObject(payload) && "data" in payload ? payload.data : payload;
     }
@@ -244,6 +387,20 @@ class DreoClient {
     }
     redactUrl(url) {
         return url.replace(/accessToken=([^&]+)/i, "accessToken=<redacted>");
+    }
+    errorToObject(error) {
+        if (error instanceof DreoApiError) {
+            return {
+                message: error.message,
+                code: error.code,
+                status: error.status,
+                retryable: error.retryable,
+                authError: error.authError,
+            };
+        }
+        if (error instanceof Error)
+            return { message: error.message };
+        return { message: String(error) };
     }
 }
 exports.DreoClient = DreoClient;

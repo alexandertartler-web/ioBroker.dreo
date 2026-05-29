@@ -33,6 +33,9 @@ export declare class DreoClient {
     private readonly http;
     private endpoint?;
     private accessToken?;
+    private legacyEndpoint?;
+    private legacyAccessToken?;
+    private legacyRegion;
     constructor(options: DreoClientOptions);
     get tokenInfo(): {
         endpoint?: string;
@@ -44,8 +47,14 @@ export declare class DreoClient {
     getDeviceState(deviceSn: string): Promise<DreoRawState>;
     updateDeviceState(deviceSn: string, desired: Record<string, any>): Promise<Record<string, any>>;
     private requestWithReauth;
+    private legacyLogin;
+    private getLegacyDevices;
+    private getLegacyDeviceState;
+    private ensureLegacyAuthenticated;
+    private legacyRequest;
     private ensureAuthenticated;
     private request;
+    private extractDeviceItems;
     private baseParams;
     private preparePassword;
     private resolveEndpoint;
@@ -53,10 +62,13 @@ export declare class DreoClient {
     private stripTokenRegion;
     private requireEndpoint;
     private requireAccessToken;
+    private requireLegacyEndpoint;
+    private requireLegacyAccessToken;
     private unwrapData;
     private isObject;
     private debug;
     private debugJson;
     private redactUrl;
+    private errorToObject;
 }
 export {};
