@@ -1,0 +1,52 @@
+{
+  "common": {
+    "name": "dreo",
+    "version": "0.0.1",
+    "title": "Dreo",
+    "titleLang": {
+      "en": "Dreo",
+      "de": "Dreo"
+    },
+    "desc": {
+      "en": "Controls Dreo smart devices through the native Dreo Cloud API.",
+      "de": "Steuert Dreo Smart Devices ueber die native Dreo Cloud API."
+    },
+    "authors": ["ioBroker Community"],
+    "keywords": ["dreo", "heater", "smart home", "cloud"],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "enabled": false,
+    "materialize": true,
+    "compact": true,
+    "connectionType": "cloud",
+    "dataSource": "poll",
+    "adminUI": {
+      "config": "json"
+    },
+    "dependencies": [
+      {
+        "js-controller": ">=5.0.0"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=6.17.0"
+      }
+    ],
+    "encryptedNative": ["password"],
+    "protectedNative": ["password"],
+    "type": "climate-control",
+    "readme": "https://github.com/iobroker-community-adapters/ioBroker.dreo/blob/main/README.md",
+    "loglevel": "info"
+  },
+  "native": {
+    "email": "",
+    "password": "",
+    "pollingInterval": 60,
+    "deviceFilter": "",
+    "debugMode": false
+  },
+  "objects": [],
+  "instanceObjects": []
+}

@@ -1,0 +1,41 @@
+{
+  "name": "iobroker.dreo",
+  "version": "0.0.1",
+  "description": "ioBroker adapter for Dreo smart devices using the native Dreo Cloud API.",
+  "author": "ioBroker Community",
+  "license": "MIT",
+  "homepage": "https://github.com/iobroker-community-adapters/ioBroker.dreo",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iobroker-community-adapters/ioBroker.dreo.git"
+  },
+  "keywords": [
+    "iobroker",
+    "dreo",
+    "heater",
+    "smarthome"
+  ],
+  "main": "build/main.js",
+  "types": "build/main.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "watch": "tsc -w -p tsconfig.json",
+    "test": "npm run build",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "@iobroker/adapter-core": "^3.2.3",
+    "axios": "^1.9.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.57",
+    "typescript": "^5.8.3"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "iobroker": {
+    "adminTab": false,
+    "supportsDocker": true
+  }
+}

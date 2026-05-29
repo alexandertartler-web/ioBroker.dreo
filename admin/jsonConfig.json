@@ -1,0 +1,45 @@
+{
+  "type": "panel",
+  "items": {
+    "email": {
+      "type": "text",
+      "label": "Dreo email",
+      "newLine": true,
+      "xs": 12,
+      "sm": 8
+    },
+    "password": {
+      "type": "password",
+      "label": "Dreo password",
+      "newLine": true,
+      "xs": 12,
+      "sm": 8
+    },
+    "pollingInterval": {
+      "type": "number",
+      "label": "Polling interval in seconds",
+      "min": 15,
+      "max": 3600,
+      "default": 60,
+      "newLine": true,
+      "xs": 12,
+      "sm": 4
+    },
+    "deviceFilter": {
+      "type": "text",
+      "label": "Optional device filter / device ID",
+      "help": "Comma-separated device serial numbers or device IDs. Leave empty to include all devices.",
+      "newLine": true,
+      "xs": 12,
+      "sm": 8
+    },
+    "debugMode": {
+      "type": "checkbox",
+      "label": "Debug mode",
+      "help": "Enables more verbose Dreo API logging without logging passwords or full access tokens.",
+      "newLine": true,
+      "xs": 12,
+      "sm": 4
+    }
+  }
+}

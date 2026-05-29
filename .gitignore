@@ -1,0 +1,7 @@
+node_modules/
+build/
+*.tgz
+*.zip
+.idea/
+.vscode/
+npm-debug.log*
